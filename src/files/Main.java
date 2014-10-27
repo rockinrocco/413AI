@@ -1,5 +1,4 @@
 package files;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -18,11 +17,11 @@ public class Main {
         String[] presidentFiles = new String[] {
             "AbrahamLincoln.txt", "AndrewJackson.txt", "AndrewJohnson.txt", "BarackObama.txt", "BenjaminHarrison.txt", "BillClinton.txt", "CalvinCoolidge.txt", "ChesterArthur.txt", "DwightEisenhower.txt", "FranklinDRoosevelt.txt", "FranklinPierce.txt", "GeorgeBush.txt", "GeorgeWashington.txt", "GeorgeWBush.txt", "GeraldFord.txt", "GroverCleveland.txt", "HarryTruman.txt", "HerbertHoover.txt", "JamesBuchanan.txt", "JamesGarfield.txt", "JamesMadison.txt", "JamesMonroe.txt", "JamesPolk.txt", "JimmyCarter.txt", "JohnAdams.txt", "JohnKennedy.txt", "JohnQuincyAdams.txt", "JohnTyler.txt", "LyndonJohnson.txt", "MartinVanBuren.txt", "MillardFillmore.txt", "RichardNixon.txt", "RonaldReagan.txt", "RutherfordHayes.txt", "TheodoreRoosevelt.txt", "ThomasJefferson.txt", "UlyssesGrant.txt", "WarrenHarding.txt", "WilliamHenryHarrison.txt", "WilliamMcKinley.txt", "WilliamTaft.txt", "WoodrowWilson.txt", "ZacharyTaylor.txt"
         };
+        //all lowercase terms
         String[] queryTerms = new String[] {
-            "adams", "lincoln", "president", "assassinated president", "great president", "first president", "civil war president"
+            "george bush","vice", "tea", "adams", "lincoln", "president", "assassinated president", "great president", "first president", "civil war president"
         };
         Map < String, String[] > fileWords = new HashMap < String, String[] > ();
-        //Query Terms -> Query Words -> filenames -> Algorithms -> Results
 
         int wordCount = 0;
         //map with all the files words. map(fileName, words[]);
@@ -33,7 +32,8 @@ public class Main {
             fileWords.put(names, words);
             wordCount += words.length;
         }
-        double averageLength = wordCount / presidentFiles.length;
+        
+      double averageLength = wordCount / presidentFiles.length;
 
       Map < String, Integer > queryMatches = new HashMap < String, Integer > ();
         
@@ -50,8 +50,55 @@ public class Main {
         		}
         	}
         	}
+        
+        
+        //bm25
+  	    TreeMap<Double, String> fileScore = new TreeMap<Double, String>();
+
+  			for (String query: queryTerms) {
+  				for (String names: presidentFiles) {
+  				double queryScore = 0;
+  				String[] queryWords = query.split(" ");      			
+          			for(String qWord: queryWords){
+          				int inDocuments=0;
+          				for(String fileNames: presidentFiles){
+          					int match = queryMatches.get(fileNames + ":"+ qWord);
+          					if(match != 0){
+          						inDocuments++;
+          					}
+          				}
+
+          				double matches = queryMatches.get(names + ":" + qWord);
+          				double score =((matches * 2.5) / (matches + 1.5 * (1 - 0.75 + 0.75 * (fileWords.get(names).length / averageLength))));
+          				double IDF = Math.log(((presidentFiles.length - inDocuments) + 0.5) / (inDocuments + 0.5));
+          				queryScore = queryScore + (score*IDF);
+          				inDocuments = 0;
+
+          		}          		
+          			while(queryScore != 0 && fileScore.get(queryScore) != null){
+          				queryScore = queryScore + 0.00001;
+          			}
+      				fileScore.put(queryScore,names+":"+query);
         }
+  			
+  	  			for(int i =0; i < 10; i++){
+  	  				if(fileScore.isEmpty()){
+  	  					System.out.println("No more documents containing "+ query);
+  	  					break;
+
+  	  				}
+  	  				Double largest = fileScore.lastKey();
+  	  				String search = fileScore.get(largest);
+  	  				fileScore.remove(largest);
+  	  				System.out.println(search + " " + largest);
+  	  			}
+  	  				fileScore.clear();
+	  				System.out.println();	
     }
+  		
+
+    }
+}
 
         	//failed bm25 attempt. Will scrap and start over.
 //            String[] queryWords = query.split(" ");
