@@ -8,13 +8,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class fileUtil  {
-
-	private String fileName;
-	public String fileText;
 	
-	@SuppressWarnings("resource")
-	public fileUtil(String fileName) throws IOException{
-		this.fileName = fileName;
+	public fileUtil(){
+		
+	}
+	
+	public String readFile(String fileName) throws IOException{
 		    BufferedReader reader = null;
 		    String path = "./" + fileName;
 		    FileInputStream fis = new FileInputStream(path);
@@ -31,7 +30,23 @@ public class fileUtil  {
 				}
 			
 
-		    this.fileText =  stringBuilder.toString();
+		    return stringBuilder.toString();
 		}
+	
+	public String[] format(String string){
+		String[] nakedString = string.replaceAll("[^a-zA-Z ]", "").toLowerCase().split("\\s+");
+		return nakedString;
 	}
+	
+	public int countMatches(String query, String[] words){
+		int matches = 0;
+		for(String word:words){
+			if(query.equals(word)){ //match found
+				matches++;
+			}
+		}
+		return matches;
+	}
+}
+	
 
