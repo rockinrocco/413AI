@@ -141,7 +141,7 @@ public class Main {
 			    }
 			}
 		    } else {
-			// compare using nGrams instead of querylen
+			// compare using nGrams instead of query.len
 			for (int i = 0; i < nGrams; i++) {
 			    if (!queryWords[i].toLowerCase().equals(
 				    fileWord[counter + i].toLowerCase())) {
@@ -156,11 +156,11 @@ public class Main {
 		    queryCount++;
 		    double finalScore = currentFileScore / (fileWord.length);
 		    System.out.println("NGRAM: " + names + ":" + query + "  = "
-			    + finalScore);
+			    + currentFileScore);
 		}
 	    }
 	    if (queryCount == 0) {
-		System.out.println(query + " : found no results");
+		System.out.println(query + " : NO RESULTS FOUND");
 	    }
 	}
     }
