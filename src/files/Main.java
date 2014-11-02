@@ -10,6 +10,9 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 
+/*
+ * Matt Rocco and Paul Bliudzius:  CSSE413 - Information Retrieval
+ */
 public class Main {
 
     public static void main(String[] args) throws IOException {
@@ -207,51 +210,3 @@ public class Main {
 	}
     }
 }
-
-// failed bm25 attempt. Will scrap and start over.
-// String[] queryWords = query.split(" ");
-// int count = 0;
-// Map < String, Double > queryScores = new HashMap < String, Double > ();
-// for (String qWord: queryWords) {
-// //individual docScores for each query word.
-// Map < String, Double > docScores = new HashMap < String, Double > ();
-//
-// int inDocuments = 0;
-// for (String names: presidentFiles) {
-// count++;
-// String[] words = fileWords.get(names);
-// int matches = fileUtil.countMatches(qWord, words);
-// if (matches != 0) {
-// inDocuments++;
-// }
-// //http://en.wikipedia.org/wiki/Okapi_BM25
-// docScores.put(names, ((matches + 2.5) / (matches + 1.5 * (1 - 0.5 + 0.5 *
-// (words.length / averageLength)))));
-// }
-//
-// double IDF = (presidentFiles.length - inDocuments + 0.5) / (inDocuments +
-// 0.5);
-// for (String names: presidentFiles) {
-// double docScore = IDF * docScores.get(names);
-// docScores.put(names, docScore);
-// double current = 0;
-// if (queryScores.get(names) == null) {
-// current = 0;
-// } else
-// current = queryScores.get(names);
-//
-// queryScores.put(names, current + docScore);
-// }
-// }
-// TreeMap<Double, String> topScores = new TreeMap<Double, String>();
-// System.out.println("Query: " + query);
-//
-// for (String names: presidentFiles) {
-// //find the top ten.
-// System.out.println(names + "..... Score: " + queryScores.get(names));
-//
-// }
-//
-// }
-// }
-// }
