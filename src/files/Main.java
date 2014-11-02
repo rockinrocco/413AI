@@ -117,6 +117,7 @@ public class Main {
 	/*
 	 * N Grams P(Wi|Wi-1) = count(Wi-1,Wi)/count(Wi-1)
 	 */
+	System.out.println();
 	int nGramsConstant = 5;
 	System.out.println("N Grams where N=" + nGramsConstant);
 	for (String query : queryTerms) {
@@ -154,13 +155,54 @@ public class Main {
 		}
 		if (currentFileScore != 0) {
 		    queryCount++;
-		    double finalScore = currentFileScore / (fileWord.length);
+		    float finalScore = ((float) currentFileScore)
+			    / ((float) fileWord.length);
 		    System.out.println("NGRAM: " + names + ":" + query + "  = "
-			    + currentFileScore);
+			    + finalScore);
 		}
 	    }
 	    if (queryCount == 0) {
 		System.out.println(query + " : NO RESULTS FOUND");
+	    }
+	}
+
+	/*
+	 * Passage Term Matching
+	 */
+	System.out.println();
+	System.out.println("Passage Term Matching");
+	for (String query : queryTerms) {
+	    String[] queryWords = query.split(" ");
+	    Map<String, Integer> queryMatchCount = new HashMap<String, Integer>();
+	    for (String qWord : queryWords) {
+		queryMatchCount.put(qWord, 0);
+	    }
+	    for (String names : presidentFiles) {
+		String currentFileString = fileStrings.get(names);
+		String[] fileWord = currentFileString.split(" ");
+		int currentFileScore = 0;
+		for (int counter = 0; counter < fileWord.length; counter++) {
+		    for (String qWord : queryWords) {
+			if (qWord.toLowerCase().equals(
+				fileWord[counter].toLowerCase())) {
+			    queryMatchCount.put(qWord,
+				    queryMatchCount.get(qWord) + 1);
+			}
+		    }
+		}
+
+		int scoreCount = 0;
+		for (String qWord : queryWords) {
+		    scoreCount += queryMatchCount.get(qWord);
+		}
+		if (scoreCount == 0) {
+		    System.out.println("No matches found for PMT: " + names
+			    + ":" + query);
+		} else {
+		    float finalScore = (scoreCount) / ((float) fileWord.length);
+		    System.out.println("PMT: " + names + ":" + query + "  = "
+			    + finalScore);
+		}
 	    }
 	}
     }
