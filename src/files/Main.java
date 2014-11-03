@@ -37,7 +37,7 @@ public class Main {
 		"WilliamHenryHarrison.txt", "WilliamMcKinley.txt",
 		"WilliamTaft.txt", "WoodrowWilson.txt", "ZacharyTaylor.txt" };
 	// all lowercase terms
-	String[] queryTerms = new String[] { "george bush", "vice", "tea",
+	String[] queryTerms = new String[] {"second term", "attended college", "serverd in the army", "founding father","anti-federalists","senate", "westmoreland county virginia","george bush", "vice", "secretary of state",
 		"adams", "lincoln", "president", "assassinated president",
 		"great president", "first president", "civil war president" };
 	Map<String, String[]> fileWords = new HashMap<String, String[]>();
