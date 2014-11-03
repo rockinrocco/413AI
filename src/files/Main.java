@@ -37,9 +37,12 @@ public class Main {
 		"WilliamHenryHarrison.txt", "WilliamMcKinley.txt",
 		"WilliamTaft.txt", "WoodrowWilson.txt", "ZacharyTaylor.txt" };
 	// all lowercase terms
-	String[] queryTerms = new String[] {"second term", "attended college", "serverd in the army", "founding father","anti-federalists","senate", "westmoreland county virginia","george bush", "vice", "secretary of state",
-		"adams", "lincoln", "president", "assassinated president",
-		"great president", "first president", "civil war president" };
+	String[] queryTerms = new String[] { "second term", "attended college",
+		"serverd in the army", "founding father", "anti-federalists",
+		"senate", "westmoreland county virginia", "george bush",
+		"vice", "secretary of state", "adams", "lincoln", "president",
+		"assassinated president", "great president", "first president",
+		"civil war president" };
 	Map<String, String[]> fileWords = new HashMap<String, String[]>();
 	Map<String, String> fileStrings = new HashMap<String, String>();
 	int wordCount = 0;
@@ -122,6 +125,7 @@ public class Main {
 	 */
 	System.out.println();
 	int nGramsConstant = 5;
+	TreeMap<Float, String> fileScoreNGRAM = new TreeMap<Float, String>();
 	System.out.println("N Grams where N=" + nGramsConstant);
 	for (String query : queryTerms) {
 	    int queryCount = 0;
@@ -160,13 +164,28 @@ public class Main {
 		    queryCount++;
 		    float finalScore = ((float) currentFileScore)
 			    / ((float) fileWord.length);
-		    System.out.println("NGRAM: " + names + ":" + query + "  = "
-			    + finalScore);
+		    fileScoreNGRAM.put(finalScore, "NGRAM: " + names + ":"
+			    + query + "  = " + finalScore);
 		}
 	    }
 	    if (queryCount == 0) {
-		System.out.println(query + " : NO RESULTS FOUND");
+		// System.out.println(query + " : NO RESULTS FOUND");
 	    }
+	    for (int i = 0; i < 10; i++) {
+		if (fileScoreNGRAM.isEmpty()) {
+		    System.out
+			    .println("No more documents containing in N Grams "
+				    + query);
+		    break;
+
+		}
+		Float largest = fileScoreNGRAM.lastKey();
+		String search = fileScoreNGRAM.get(largest);
+		fileScoreNGRAM.remove(largest);
+		System.out.println(search);
+	    }
+	    fileScoreNGRAM.clear();
+	    System.out.println();
 	}
 
 	/*
@@ -174,6 +193,7 @@ public class Main {
 	 */
 	System.out.println();
 	System.out.println("Passage Term Matching");
+	TreeMap<Float, String> fileScorePMT = new TreeMap<Float, String>();
 	for (String query : queryTerms) {
 	    String[] queryWords = query.split(" ");
 	    Map<String, Integer> queryMatchCount = new HashMap<String, Integer>();
@@ -199,14 +219,28 @@ public class Main {
 		    scoreCount += queryMatchCount.get(qWord);
 		}
 		if (scoreCount == 0) {
-		    System.out.println("No matches found for PMT: " + names
-			    + ":" + query);
+		    // Do nothing
 		} else {
 		    float finalScore = (scoreCount) / ((float) fileWord.length);
-		    System.out.println("PMT: " + names + ":" + query + "  = "
-			    + finalScore);
+		    fileScorePMT.put(finalScore, "PMT: " + names + ":" + query
+			    + "  = " + finalScore);
 		}
 	    }
+	    for (int i = 0; i < 10; i++) {
+		if (fileScorePMT.isEmpty()) {
+		    System.out
+			    .println("No more documents containing in N Grams "
+				    + query);
+		    break;
+
+		}
+		Float largest = fileScorePMT.lastKey();
+		String search = fileScorePMT.get(largest);
+		fileScorePMT.remove(largest);
+		System.out.println(search);
+	    }
+	    fileScorePMT.clear();
+	    System.out.println();
 	}
     }
 }
